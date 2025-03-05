@@ -103,7 +103,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'aflapvr@gmail.com'  # Your email
-EMAIL_HOST_PASSWORD = 'dnen qvbf mcbj oemc'  # Generate App Password from Google
+  # Generate App Password from Google
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Internationalization
