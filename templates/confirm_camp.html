@@ -1,0 +1,17 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Camp</title>
+</head>
+<body>
+    <h2>Camp Confirmation</h2>
+    <p>Do you want to confirm the camp request from {{ booking.school }}?</p>
+    <a href="{% url 'confirm_camp' booking.id 'yes' %}">
+        <button style="background-color: green; color: white;">✔ Confirm</button>
+    </a>
+    <a href="{% url 'confirm_camp' booking.id 'no' %}">
+        <button style="background-color: red; color: white;">❌ Decline</button>
+    </a>
+</body>
+</html>
