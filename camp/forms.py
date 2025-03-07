@@ -15,4 +15,19 @@ class CampRequestForm(forms.ModelForm):
         fields = ["school_name", "email", "pdf_file", "medical_center", "date"]
         widgets = {
             "date": forms.DateInput(attrs={"type": "date"}),  # Google Calendar-like picker
-        }        
+        }     
+
+
+from django import forms
+from .models import Patient
+
+class PatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = ['name', 'patient_id', 'email', 'school_email']           
+
+
+
+
+
+

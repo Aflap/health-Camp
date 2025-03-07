@@ -94,17 +94,28 @@
     {% csrf_token %}
                   <input type="text" name="school_name" class="btn btn-light w-75 mb-3" placeholder="Name of School/Company " required/>
                   <input type="text" name="email" class="btn btn-light w-75 mb-3" placeholder="Email " required/>
-                  <input type="file" name="pdf_file" accept=".pdf" class="btn btn-light w-75 mb-3"  required/>
+                  
+                    <p style="color:yellow" class=" w-75 mx-auto mb-3">Upload PDF file contains<br> patient name,email,company email</p>
+                    <input type="file" name="pdf_file" accept=".pdf" class="btn btn-light w-75 mb-3 form-control w-50 mx-auto"  required/>
+              
+                  
        
       <div class="btn btn-light w-75 mb-3">
      <select name="medical_center" required>
-        <option  value="">Select a center</option>
+        <option  value="">Select available medical center</option>
         {% for center in medical_centers %}
         <option value="{{ center.id }}">{{ center.name }}</option>
         {% endfor %}
     </select></div>
-                  <input type="date" name="date" class="btn btn-light w-75 mb-3" placeholder="Choose date" required/>  
-                  
+                  <input type="date" name="date" class="btn btn-light w-75 mb-3" placeholder="Choose date" onfocus="this.type='date'" onblur="if(!this.value) this.type='text'" required/>  
+                  <script>
+                    document.getElementById("dateField").onfocus = function() {
+                      this.placeholder = "";
+                    };
+                    document.getElementById("dateField").onblur = function() {
+                      this.placeholder = "dd/mm/yyyy";
+                    };
+                  </script>
                   <button type="submit" class="btn btn-light w-75 mb-2">Request for camp</button></form>
                 </div>
             </div>

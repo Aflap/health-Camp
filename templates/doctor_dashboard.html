@@ -71,54 +71,139 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero section light-background">
-
       <img src="static/assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
-
       <div class="container position-relative">
-
         <div class="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
           <h2>Health Camp Organizer</h2>
-          
         </div><!-- End Welcome -->
-
+    
         <div class="content row gy-4">
-          <div class="col-lg-5">
+          <div class="col-lg-8">
             <div class="why-box" data-aos="zoom-out" data-aos-delay="200">
-              <center><h3>  Welcome! </h3></center>
-              
-             
+              <center><h3>Welcome!{{ drname }}</h3></center>
               <div class="container text-center">
-                
                 <div class="d-flex flex-column align-items-center">
-                  <form method="POST" action="{% url 'doctor_dashboard' %}">
+                  <form method="POST" action="{% url 'submit' %}">
                     {% csrf_token %}
+                    <!-- Input with autocomplete -->
+                    <input type="text" id="name_patient" name="name_patient" class="btn btn-light w-75 mb-3" 
+                           placeholder="Name of patient" list="patient_list" required />
+                    
+                    <datalist id="patient_list">
+                      <!-- Dynamic patient names will be populated by JS -->
+                    </datalist>
+                
+                    <textarea name="symptoms" class="btn btn-light w-75 mb-3" placeholder="Symptoms" rows="4" required></textarea>
+                    <textarea name="diagnosis" class="btn btn-light w-75 mb-3" placeholder="Diagnosis" rows="4" required></textarea>
+                    <textarea name="trtplan" class="btn btn-light w-75 mb-3" placeholder="Treatment plan" rows="4" required></textarea>
+                
+                    <!-- Patient Condition (Normal / Serious) -->
+                    <select name="condition" class="btn btn-light w-75 mb-3" required>
+                        <option value="Normal">Normal</option>
+                        <option value="Serious">Serious</option>
+                    </select>
+                
+                    <button type="submit" class="btn btn-light w-75 mb-3">Submit</button></form>
+                    <button type="button" class="btn btn-light w-75 mb-3" id="send-pdf-btn" >
+                      Send PDF to Company & Medical Center
+                  </button>
                   
-                  <input type="text" name="name_patient" class="btn btn-light w-75 mb-3" placeholder="Name of patient" required/> 
-                  <textarea  name="symtoms" class="btn btn-light w-75 mb-3" placeholder="Symptoms"row="6" required></textarea>
-                  <textarea type="text" name="diagnosis" class="btn btn-light w-75 mb-3" placeholder="Diagnosis" required></textarea>
-                  <textarea type="text" name="trtplan " class="btn btn-light w-75 mb-3" placeholder="Treatment plan" required></textarea>
-               
+                  <!-- Message to prompt user to submit the form first -->
+                  <div id="message" style="display: none;" class="alert alert-warning mt-3">
+                      Please submit the form first before sending the PDF.
+                  </div>
+                  <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                      const form = document.querySelector('form');
+                      const sendPdfBtn = document.getElementById('send-pdf-btn');
+                      const message = document.getElementById('message');
+                      
+                      // Enable the "Send PDF" button after form submission
+                      form.addEventListener('submit', function (event) {
+                          sendPdfBtn.disabled = false;  // Enable the button after form submission
+                          message.style.display = 'none';  // Hide the warning message
+                      });
                   
-                  <button type="submit" class="btn btn-light w-75 mb-2">submit</button>
-                  </form>
+                      // If the "Send PDF" button is clicked before submission
+                      sendPdfBtn.addEventListener('click', function () {
+                          if (sendPdfBtn.disabled) {
+                              message.style.display = 'block';  // Show message to submit the form first
+                          } else {
+                              // Send PDF logic here
+                              const patientId = document.getElementById('name_patient').value;
+                              fetch(`/send-pdf/${patientId}/`, {
+                                  method: 'GET',
+                                  headers: {
+                                      'Content-Type': 'application/json',
+                                      'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                                  }
+                              })
+                              .then(response => response.json())
+                              .then(data => {
+                                  if (data.status === 'success') {
+                                      alert('PDF sent successfully!');
+                                  } else {
+                                      alert('Error: ' + data.message);
+                                  }
+                              })
+                              .catch(error => {
+                                  console.error('Error:', error);
+                                  alert('An error occurred while sending the PDF.');
+                              });
+                          }
+                      });
+                  });
+                  
+                
+              </script>
+                
+                <!-- After the form submission, show this button to send PDF to Medical Center and Company -->
+              
+                
+                
                 </div>
-            </div>
-            </div>
-          </div><!-- End Why Box -->
-
-                   
-
-
               </div>
             </div>
           </div>
-        </div><!-- End  Content-->
-
+        </div>
       </div>
-
     </section><!-- /Hero Section -->
-
-  
+    
+    <!-- jQuery & jQuery UI (Include this in <head> or before </body>) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+    
+    <script>
+      $(document).ready(function () {
+        $("#name_patient").autocomplete({
+          source: function (request, response) {
+            $.ajax({
+              url: "{% url 'patient_autocomplete' %}",  // Ensure correct URL is used
+              data: { term: request.term },  // Send the entered term to the server
+              dataType: "json",  // Expect a JSON response
+              success: function (data) {
+                // 'data' should be an array of patient names (e.g., ['John Doe', 'Jane Smith'])
+                response($.map(data, function (item) {
+                  return {
+                    label: item,  // Each item is a string (patient name)
+                    value: item   // Same string used for value when selected
+                  };
+                }));
+              }
+            });
+          },
+          minLength: 1  // Minimum characters before showing suggestions
+        });
+      });
+    </script>
+    
+    
+    
 
   </main>
   <footer>

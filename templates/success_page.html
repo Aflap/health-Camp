@@ -72,43 +72,14 @@
     <!-- Hero Section -->
     <section id="hero" class="hero section light-background">
 
-      <img src="static/assets/img/hero-bg.jpg" alt="" data-aos="fade-in">
+      <img src="static/assets/img/about.jpg" alt="" data-aos="fade-in">
 
       <div class="container position-relative">
 
         <div class="welcome position-relative" data-aos="fade-down" data-aos-delay="100">
-          <h2>Health Camp Organizer</h2>
+          <h2  style=" background:white;">submitted!</h2>
+          <p style="background:white;">Email successfully is send to the patient</p>
           
-        </div><!-- End Welcome -->
-
-        <div class="content row gy-4">
-          <div class="col-lg-5">
-            <div class="why-box" data-aos="zoom-out" data-aos-delay="200">
-              <center><h3>  Login Here!  </h3></center>
-              
-             
-              <div class="container text-center">
-                
-                <div class="d-flex flex-column align-items-center">
-                  <form method="POST" action="{% url 'doctor_dashboard' %}">
-                    {% csrf_token %}
-                  
-                  <input type="text" name="medical_center" class="btn btn-light w-75 mb-3" placeholder="Name of Medical Center" required/> 
-                  <input type="text" name="namedr" class="btn btn-light w-75 mb-3" placeholder="Name of Consulting Doctor" required/>
-                  <input type="text" name="Department" class="btn btn-light w-75 mb-3" placeholder="Department" required/>
-                  <input type="text" name="Password " class="btn btn-light w-75 mb-3" placeholder="Password" required/>
-               
-                  
-                  <button type="submit" class="btn btn-light w-75 mb-2">Login</button>
-                  </form>
-                </div>
-            </div>
-            </div>
-          </div><!-- End Why Box -->
-
-                   
-
-
               </div>
             </div>
           </div>
@@ -122,10 +93,7 @@
 
   </main>
   <footer>
-    <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Health Camp Organizer</strong> <span>All Rights Reserved</span></p>
-     
-    </div>
+  
 
   </footer>
 
